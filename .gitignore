@@ -1,0 +1,44 @@
+# Ignore compiled binaries and object files
+bin/
+obj/
+
+# Ignore IDE and editor specific files
+.vscode/
+.idea/
+
+# Ignore build output and temporary files
+build/
+temp/
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app

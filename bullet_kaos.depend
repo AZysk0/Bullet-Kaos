@@ -1,0 +1,127 @@
+# depslib dependency file v1.0
+1686508842 source:d:\projects\bullet_kaos\bullet_kaos\main.cpp
+	"GameWindow.h"
+
+1658496778 d:\_cpp_libs\glfw\include\glfw\glfw3.h
+	<stddef.h>
+	<stdint.h>
+	<vulkan/vulkan.h>
+	<GLES/gl.h>
+	<GLES/glext.h>
+	<GLES2/gl2.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl3.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl31.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl32.h>
+	<GLES2/gl2ext.h>
+	<OpenGL/gl3.h>
+	<OpenGL/gl3ext.h>
+	<GL/glcorearb.h>
+	<GL/glext.h>
+	<OpenGL/glu.h>
+	<GL/glu.h>
+	<OpenGL/gl.h>
+	<GL/gl.h>
+	<GL/glext.h>
+
+1658496778 c:\_cpp_libs\glfw\include\glfw\glfw3.h
+	<stddef.h>
+	<stdint.h>
+	<vulkan/vulkan.h>
+	<GLES/gl.h>
+	<GLES/glext.h>
+	<GLES2/gl2.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl3.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl31.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl32.h>
+	<GLES2/gl2ext.h>
+	<OpenGL/gl3.h>
+	<OpenGL/gl3ext.h>
+	<GL/glcorearb.h>
+	<GL/glext.h>
+	<OpenGL/glu.h>
+	<GL/glu.h>
+	<OpenGL/gl.h>
+	<GL/gl.h>
+	<GL/glext.h>
+
+1658496778 c:\glfw\include\glfw\glfw3.h
+	<stddef.h>
+	<stdint.h>
+	<vulkan/vulkan.h>
+	<GLES/gl.h>
+	<GLES/glext.h>
+	<GLES2/gl2.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl3.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl31.h>
+	<GLES2/gl2ext.h>
+	<GLES3/gl32.h>
+	<GLES2/gl2ext.h>
+	<OpenGL/gl3.h>
+	<OpenGL/gl3ext.h>
+	<GL/glcorearb.h>
+	<GL/glext.h>
+	<OpenGL/glu.h>
+	<GL/glu.h>
+	<OpenGL/gl.h>
+	<GL/gl.h>
+	<GL/glext.h>
+
+1686334923 d:\projects\bullet_kaos\bullet_kaos\include\glfwwindow.h
+	<iostream>
+	<GLFW/glfw3.h>
+
+1686335201 source:d:\projects\bullet_kaos\bullet_kaos\src\glfwwindow.cpp
+	"GLFWWindow.h"
+
+1686863720 source:d:\projects\bullet_kaos\bullet_kaos\src\gamewindow.cpp
+	"GameWindow.h"
+
+1686699302 d:\projects\bullet_kaos\bullet_kaos\include\gamewindow.h
+	<iostream>
+	<GLFW/glfw3.h>
+	<cmath>
+	"GameInstances.h"
+	"animations.h"
+
+1686694176 d:\projects\bullet_kaos\bullet_kaos\include\gameinstances.h
+	<GLFW/glfw3.h>
+	<glm/glm.hpp>
+	<glm/gtx/vector_angle.hpp>
+	<iostream>
+	<vector>
+	<cmath>
+	"GameWindow.h"
+
+1686694329 source:d:\projects\bullet_kaos\bullet_kaos\src\gameinstances.cpp
+	"GameInstances.h"
+
+1686694051 source:d:\projects\bullet_kaos\bullet_kaos\src\animations.cpp
+	"animations.h"
+	"GameInstances.h"
+
+1686671817 d:\projects\bullet_kaos\bullet_kaos\include\animations.h
+	<GLFW/glfw3.h>
+	<glm/glm.hpp>
+	<vector>
+	<algorithm>
+	<cmath>
+	<ctime>
+	"GameInstances.h"
+
+1686671817 source:d:\projects\bullet_kaos\bullet_kaos\include\animations.h
+	<GLFW/glfw3.h>
+	<glm/glm.hpp>
+	<vector>
+	<algorithm>
+	<cmath>
+	<ctime>
+	"GameInstances.h"
+
