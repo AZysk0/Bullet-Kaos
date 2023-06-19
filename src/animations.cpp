@@ -201,15 +201,33 @@ void Animation::animation_update_state(float dt)
     }
 }
 
-void Animation::particles_render_collisions() const
+// render functions
+void Animation::gl_render_collision_sfx() const
 {
     //std::vector<float> angles = this->enemy_pool_ptr->get_collision_slopes();
     for(Particles* particles_ptr : this->collision_particles_alive)
         particles_ptr->gl_render();
 }
 
-void Animation::gl_animation_render() const
+void Animation::gl_render_player_sfx() const
+{
+    // render player trail
+    // "mist" around player
+    // random particles around player
+}
+
+void Animation::gl_render_enemies_sfx() const
+{
+    // same as
+}
+
+void Animation::gl_render_background() const
+{
+
+}
+
+void Animation::gl_animation_render_all() const
 {
     // animate collisions
-    this->particles_render_collisions();
+    this->gl_render_collision_sfx();
 }

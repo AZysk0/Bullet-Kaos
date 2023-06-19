@@ -10,7 +10,7 @@ int main()
         return -1;
     }
 
-    window.game_main_loop();
+    window.Run();
     window.Shutdown();
 
     return 0;

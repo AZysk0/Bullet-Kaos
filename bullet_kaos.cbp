@@ -41,18 +41,23 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 			<Add directory="C:/GLFW/include" />
+			<Add directory="C:/_cpp_libs/freeglut/include/GL" />
 		</Compiler>
 		<Linker>
 			<Add library="C:/Program Files/CodeBlocks/MinGW/x86_64-w64-mingw32/lib/libopengl32.a" />
 			<Add library="C:/GLFW/lib/libglfw3dll.a" />
 			<Add library="C:/GLFW/lib/libglfw3.a" />
+			<Add library="C:/_cpp_libs/freeglut/lib/x64/libfreeglut.a" />
+			<Add library="C:/_cpp_libs/freeglut/lib/x64/libfreeglut_static.a" />
 			<Add directory="C:/GLFW/lib" />
+			<Add directory="C:/_cpp_libs/freeglut/lib/x64" />
 		</Linker>
 		<Unit filename="include/GameInstances.h" />
 		<Unit filename="include/GameWindow.h" />
 		<Unit filename="include/animations.h">
 			<Option compile="1" />
 		</Unit>
+		<Unit filename="include/bosses.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/GameInstances.cpp" />
 		<Unit filename="src/GameWindow.cpp" />

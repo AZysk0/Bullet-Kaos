@@ -68,6 +68,10 @@ private:
     EnemyPool* enemy_pool_ptr;
     Player* player_ptr;
     std::vector<Particles*> collision_particles_alive;
+    bool enable_collision_sfx;
+    bool enable_player_sfx;
+    bool enable_enemies_sfx;
+    bool enable_background;
 
 public:
     Animation(EnemyPool* enemy_pool_ptr, Player* player);
@@ -82,8 +86,11 @@ public:
     void animation_update_state(float dt);
 
     // render functions
-    void gl_animation_render() const;
-    void particles_render_collisions() const;
+    void gl_render_collision_sfx() const;
+    void gl_render_player_sfx() const;
+    void gl_render_enemies_sfx() const;
+    void gl_render_background() const;
+    void gl_animation_render_all() const;
 };
 
 #endif // ANIMATIONS_H_INCLUDED

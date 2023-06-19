@@ -75,6 +75,8 @@ public:
     Player();
     ~Player();
     //
+    void load_player_config();
+    //
     void update_position(float dt) override;
     void reset_direction();
     //
