@@ -190,11 +190,13 @@ bool GameWindow::Initialize()
 
 void GameWindow::Run()
 {
+    //
+    unsigned short int main_menu_max_labels = 6;
     // load settings/configuration from the file
 
     // create MainMenu window
     //MainMenu* main_menu = new MainMenu(); // heap allocation
-    MainMenu main_menu = MainMenu();    // stack allocation
+    MainMenu main_menu = MainMenu(main_menu_max_labels);    // stack allocation
     main_menu.menu_register_key_callback(this->m_window);
     //+++ somehow create current window object and swap between them
     this->is_current_main_menu = true;
@@ -297,25 +299,83 @@ void GameWindow::MouseButtonCallback(GLFWwindow* window, int button, int action,
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-// =============== Menus methods implementation ======================
+// ===============  methods implementation ======================
 
-MainMenu::MainMenu()
+// Abstract menu
+AbstractMenu::AbstractMenu(unsigned short int max_labels)
+{
+    this->current_label = 0;
+    this->menu_choice = -1;
+    this->max_labels = max_labels;
+}
+
+AbstractMenu::~AbstractMenu()
+{
+    // abstract menu destructor
+}
+
+//
+void AbstractMenu::increment_current_label(short int n)
+{
+    // implement ring structure of main menu
+    this->current_label = (this->current_label + n + this->max_labels) % this->max_labels;
+}
+
+// setters/getters
+void AbstractMenu::set_current_label(unsigned short int n)
+{
+    // check if outside of the set of possible values
+    this->current_label = n;
+    this->current_label %= this->max_labels;    // circular structure of menu
+}
+
+void AbstractMenu::set_menu_choice(unsigned short int n)
+{
+    bool is_legal = (n > this->max_labels) ? false : true;
+    if (is_legal)
+        this->current_label = n;
+}
+
+unsigned short int AbstractMenu::get_current_label() const
+{
+    return this->current_label;
+}
+
+unsigned short int AbstractMenu::get_menu_choice() const
+{
+    return this->menu_choice;
+}
+
+void AbstractMenu:: menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    return;
+}
+
+void AbstractMenu::static_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    AbstractMenu* abstract_menu = static_cast<AbstractMenu*>(glfwGetWindowUserPointer(window));
+    abstract_menu->menu_key_callback(window, key, scancode, action, mods);
+}
+
+void AbstractMenu::menu_register_key_callback(GLFWwindow* window)
+{
+    glfwSetWindowUserPointer(window, this);
+    glfwSetKeyCallback(window, static_key_callback);
+    std::cout << "menu initialized. max labels:" << this->max_labels << '\n';
+}
+
+// ============= Main menu ==============
+MainMenu::MainMenu(unsigned short int max_labels) : AbstractMenu(max_labels)
 {
     // main menu constructor by default
     this->current_label = 0;    // 0 is a Endless mode
     this->menu_choice = -1;     // -1 will be treated as NULL-like value
+    this->max_labels = max_labels;
 }
 
 MainMenu::~MainMenu()
 {
     // main menu destructor
-}
-
-//
-void MainMenu::increment_current_label(short int n)
-{
-    // implement ring structure of main menu
-    this->current_label = (this->current_label + n + this->max_labels) % this->max_labels;
 }
 
 // main menu rendering methods
@@ -454,35 +514,11 @@ void MainMenu::render_main_menu() const
     this->render_menu_labels();
 }
 
-// setters/getters
-void MainMenu::set_current_label(unsigned short int n)
-{
-    // check if outside of the set of possible values
-    this->current_label = n;
-    this->current_label %= this->max_labels;    // circular structure of menu
-}
-
-void MainMenu::set_menu_choice(unsigned short int n)
-{
-    bool is_legal = (n > this->max_labels) ? false : true;
-    if (is_legal)
-        this->current_label = n;
-}
-
-unsigned short int MainMenu::get_current_label() const
-{
-    return this->current_label;
-}
-
-unsigned short int MainMenu::get_menu_choice() const
-{
-    return this->menu_choice;
-}
-
 // glfw key callback functions
-void MainMenu:: menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void MainMenu::menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     //MainMenu* mainMenu = static_cast<MainMenu*>(glfwGetWindowUserPointer(window));
+    std::cout << this->max_labels << '\n';
 
     // handle !release key events
     if (action != GLFW_RELEASE) // mb action == GLFW_PRESS (test it out)
@@ -512,17 +548,41 @@ void MainMenu:: menu_key_callback(GLFWwindow* window, int key, int scancode, int
     }
 }
 
-void MainMenu::static_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+// ===== Pause methods definition
+PauseMenu(unsigned short int max_labels)
 {
-    MainMenu* mainMenu = static_cast<MainMenu*>(glfwGetWindowUserPointer(window));
-    mainMenu->menu_key_callback(window, key, scancode, action, mods);
+
 }
 
-void MainMenu::menu_register_key_callback(GLFWwindow* window)
+~PauseMenu()
 {
-    glfwSetWindowUserPointer(window, this);
-    glfwSetKeyCallback(window, static_key_callback);
+
 }
+
+//
+void pause_call()
+{
+
+}
+
+void render_pause_labels() const
+{
+
+}
+
+void render_pause_menu() const
+{
+
+}
+
+// separate key_callback glfw functions
+void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    return;
+}
+
+// ==== GameOver menu methods definition
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 

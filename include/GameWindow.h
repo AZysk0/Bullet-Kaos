@@ -97,50 +97,75 @@ public:
 // -- Settings (Graphics, Difficulty)
 // ======================================================
 
-class MainMenu
+// abstract class for menus
+class AbstractMenu
 {
-private:
-    unsigned short int current_label;       // label current choice on
-    unsigned short int menu_choice;         // being assigned after hitting enter button
-    const unsigned short int max_labels=6;  // max labels in menu now
+protected:
+    unsigned short int current_label;   // label current choice on
+    unsigned short int menu_choice;     // being assigned after hitting enter button
+    unsigned short int max_labels;
 public:
-    //
-    MainMenu();
-    ~MainMenu();
-    //
+    AbstractMenu(unsigned short int max_labels);
+    ~AbstractMenu();
+    // move between menu labels function
     void increment_current_label(short int n);
-    // main menu rendering functions
-    void render_menu_background() const;
-    void render_game_logo() const;
-    void render_menu_labels() const;
-    void render_main_menu() const;
     // setters/getters
     void set_current_label(unsigned short int n);
     void set_menu_choice(unsigned short int n);
     unsigned short int get_current_label() const;
     unsigned short int get_menu_choice() const;
-    // glfw key callback functions
-    void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    // key callback
+    virtual void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void static_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods); // static wrapper
-    void menu_register_key_callback(GLFWwindow* window); // register key
+    void menu_register_key_callback(GLFWwindow* window);
 };
 
 
-class PauseMenu
+class MainMenu : public AbstractMenu
 {
 private:
-    unsigned short int current_label;  // label current choice on
-    unsigned short int menu_choice;    // being assigned after hitting enter button
-    bool is_paused;
+    unsigned short int max_labels;  // max labels in menu now
 public:
-    PauseMenu();
+    //
+    MainMenu(unsigned short int max_labels);
+    ~MainMenu();
+    // main menu rendering functions
+    void render_menu_background() const;
+    void render_game_logo() const;
+    void render_menu_labels() const;
+    void render_main_menu() const;
+    // glfw key callback functions
+    void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
+    //static void static_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods); // static wrapper
+    //void menu_register_key_callback(GLFWwindow* window); // register key
+};
+
+
+class PauseMenu : public AbstractMenu
+{
+private:
+    const unsigned short int max_labels=2;
+public:
+    PauseMenu(unsigned short int max_labels);
     ~PauseMenu();
     //
     void pause_call();  // while loop
     void render_pause_labels() const;
     void render_pause_menu() const;
     // separate key_callback glfw functions
-    // static void key_callback(...);
+    void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
+};
+
+
+class GameoverMenu : public AbstractMenu
+{
+private:
+    const unsigned short int max_labels=2;
+public:
+    GameoverMenu(unsigned short int max_labels);
+    ~GameoverMenu();
+    // GLFW callback functions
+    void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
 };
 
 

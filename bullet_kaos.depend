@@ -81,13 +81,13 @@
 1686335201 source:d:\projects\bullet_kaos\bullet_kaos\src\glfwwindow.cpp
 	"GLFWWindow.h"
 
-1687206065 source:d:\projects\bullet_kaos\bullet_kaos\src\gamewindow.cpp
+1687209073 source:d:\projects\bullet_kaos\bullet_kaos\src\gamewindow.cpp
 	"GameWindow.h"
 
-1687204074 d:\projects\bullet_kaos\bullet_kaos\include\gamewindow.h
+1687258027 d:\projects\bullet_kaos\bullet_kaos\include\gamewindow.h
 	<iostream>
 	<GLFW/glfw3.h>
-	<GL/glut.h>
+	<GL/freeglut.h>
 	<cmath>
 	"GameInstances.h"
 	"animations.h"
