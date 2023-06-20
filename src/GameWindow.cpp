@@ -22,25 +22,68 @@ void gl_draw_bordered_rectangle(float x_pos, float y_pos,
     glEnd();
 }
 
+// handling OpenGL metrics
+glm::vec2 pixel_to_opengl_coordinates(int px, int py)
+{
+    GLFWwindow* window = glfwGetCurrentContext();
+    int wnd_width, wnd_height;
+    glfwGetWindowSize(window, &wnd_width, &wnd_height);
+
+    float gl_x = (2.0f * px / wnd_width) - 1.0f;
+    float gl_y = 1.0f - (2.0f * py / wnd_height);
+
+    return glm::vec2(gl_x, gl_y);
+}
+
+glm::vec2 opengl_to_pixel_coordinates(float gl_x, float gl_y)
+{
+    GLFWwindow* window = glfwGetCurrentContext();
+    int wnd_width, wnd_height;
+    glfwGetWindowSize(window, &wnd_width, &wnd_height);
+
+    int px = static_cast<int>((gl_x + 1.0f) * wnd_width / 2.0f);
+    int py = static_cast<int>((1.0f - gl_y) * wnd_height / 2.0f);
+
+    return glm::vec2(px, py);
+}
+
 // text rendering functions
-void gl_draw_text_window_pos(const char* text, unsigned int x, unsigned int y, glm::vec4 color)
+int get_text_bitmap_width(const char* text, void* font)
+{
+    int length = 0;
+    if (text != nullptr && font != nullptr)
+    {
+        length = glutBitmapLength(font, reinterpret_cast<const unsigned char*>(text));
+    }
+    return length;
+}
+
+int get_text_bitmap_height(void* font)
+{
+    int height = 0;
+    if (font != nullptr)
+    {
+        height = glutBitmapHeight(font);
+    }
+    return height;
+}
+
+void gl_draw_text_window_pos(const char* text, void* font, float x, float y, glm::vec4 color)
 {
     GLFWwindow* window_ptr = glfwGetCurrentContext();
     // Set the text color
     glColor4f(color.r, color.g, color.b, color.a);
 
-    // Set the window position for rendering
-    glfwSetWindowPos(window_ptr, x, y);
-
+    glRasterPos2f(x, y);
     // Render the text character by character
     for (const char* c = text; *c != '\0'; ++c)
     {
-        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, *c);
+        glutBitmapCharacter(font, *c);
     }
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
-void gl_draw_text_raster_pos(const char* text, float x, float y, glm::vec3 color)
+void gl_draw_text_raster_pos(const char* text, void* font, float x, float y, glm::vec3 color)
 {
     // Set the text color
     glColor3f(color.r, color.g, color.b);
@@ -56,17 +99,36 @@ void gl_draw_text_raster_pos(const char* text, float x, float y, glm::vec3 color
 
 void gl_draw_menu_label_centered(
     const char* text, float x_pos, float y_pos, float width, float height,
-    glm::vec4 font_color, glm::vec4 bg_color, glm::vec4 border_color
+    glm::vec4 font_color, glm::vec4 bg_color, glm::vec4 border_color,
+    void* font
 )
 {
+    // GLFW window current parameters
+    GLFWwindow* window = glfwGetCurrentContext();
+    int wnd_width, wnd_height;
+    glfwGetWindowSize(window, &wnd_width, &wnd_height);
+
+    // convert
+    int text_width_px = get_text_bitmap_width(text, GLUT_BITMAP_HELVETICA_18);
+    int text_height_px = get_text_bitmap_height(GLUT_BITMAP_HELVETICA_18);
+
     // (x_pos, y_pos) is a top-left corner of rectangle
     // center is x=0, y in (-1; 1)
     // compute rectangle that is centered by x_pos in main menu
     float x_pos_new = x_pos - 0.5 * width;
     float y_pos_new = y_pos;
     gl_draw_bordered_rectangle(x_pos_new, y_pos_new, width, height, bg_color, border_color);
+
     // compute text coordinates so that it centered inside rectangle
     // gl_draw_text_window_pos(text, ...)
+    int text_bitmap_width_px = get_text_bitmap_width(text, font);
+    int text_bitmap_height_px = get_text_bitmap_height(font);
+    float text_bitmap_width_gl = text_bitmap_width_px / static_cast<float>(wnd_width);
+    float text_bitmap_height_gl = text_bitmap_height_px / static_cast<float>(wnd_height);
+    // draw text centered inside already drawn rectangle
+    float text_x = x_pos_new + 0.5f * (width - text_bitmap_width_gl) - 0.07f;
+    float text_y = y_pos_new + 0.5f * (height - text_bitmap_height_gl);
+    gl_draw_text_window_pos(text, font, text_x, text_y, font_color);
 }
 
 // ====== Game Window methods definition =================
@@ -156,7 +218,6 @@ void GameWindow::Shutdown()
     glfwTerminate();
 }
 
-// ================ Game mainloop functions ==========================
 void GameWindow::game_setup()
 {
     glViewport(0, 0, this->m_width, this->m_height);
@@ -270,6 +331,8 @@ void MainMenu::render_game_logo() const
 
 void MainMenu::render_menu_labels() const
 {
+    void* font = GLUT_BITMAP_HELVETICA_18;
+    //
     float alpha = 1.0f;
     glm::vec4 color_gray = glm::vec4(0.5f, 0.5f, 0.5f, alpha);
     glm::vec4 color_black = glm::vec4(0.0f, 0.0f, 0.0f, alpha);
@@ -348,32 +411,38 @@ void MainMenu::render_menu_labels() const
     // Endless
     gl_draw_menu_label_centered(
         "Endless", 0, label_start_heigh, label_width, label_height,
-        color_endless_font, color_endless_bg, color_endless_border
+        color_endless_font, color_endless_bg, color_endless_border,
+        font
     );
     // Boss-fight
     gl_draw_menu_label_centered(
         "Bossfight", 0,  label_start_heigh + label_height_step, label_width, label_height,
-        color_bossfight_font, color_bossfight_bg, color_bossfight_border
+        color_bossfight_font, color_bossfight_bg, color_bossfight_border,
+        font
     );
     // Campaign
     gl_draw_menu_label_centered(
         "Campaign", 0, label_start_heigh + label_height_step * 2, label_width, label_height,
-        color_campaign_font, color_campaign_bg, color_campaign_border
+        color_campaign_font, color_campaign_bg, color_campaign_border,
+        font
     );
     // Customize
     gl_draw_menu_label_centered(
         "Customize", 0, label_start_heigh + label_height_step * 3, label_width, label_height,
-        color_customize_font, color_customize_bg, color_customize_border
+        color_customize_font, color_customize_bg, color_customize_border,
+        font
     );
     // Highscores
     gl_draw_menu_label_centered(
         "Highscores", 0, label_start_heigh + label_height_step * 4, label_width, label_height,
-        color_highscores_font, color_highscores_bg, color_highscores_border
+        color_highscores_font, color_highscores_bg, color_highscores_border,
+        font
     );
     // Settings
     gl_draw_menu_label_centered(
         "Settings", 0, label_start_heigh + label_height_step * 5, label_width, label_height,
-        color_settings_font, color_settings_bg, color_settings_border
+        color_settings_font, color_settings_bg, color_settings_border,
+        font
     );
 }
 

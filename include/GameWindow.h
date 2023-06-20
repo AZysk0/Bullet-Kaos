@@ -4,7 +4,8 @@
 
 #include <iostream>
 #include <GLFW/glfw3.h>
-#include <GL/glut.h>
+//#include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <cmath>
 
 #include "GameInstances.h"
@@ -15,12 +16,20 @@
 void gl_draw_bordered_rectangle(float x_pos, float y_pos,
                                 float width, float height,
                                 glm::vec4 fill_color, glm::vec4 border_color);
-// text rendering
-void gl_draw_text_window_pos(const char* text, int x, int y, glm::vec3 color);
-void gl_draw_text_raster_pos(const char* text, float x, float y, glm::vec3 color);
+
+// handling OpenGL metrics functions
+glm::vec2 pixel_to_opengl_coordinates(int px, int py);
+glm::vec2 opengl_to_pixel_coordinates(float gl_x, float gl_y);
+
+// text rendering functions
+int get_text_bitmap_width(const char* text, void* font);
+int get_text_bitmap_height(void* font);
+void gl_draw_text_window_pos(const char* text, void* font, float x, float y, glm::vec3 color);
+void gl_draw_text_raster_pos(const char* text, void* font, float x, float y, glm::vec3 color);
 void gl_draw_menu_label_centered(
     const char* text, float x_pos, float y_pos, float width, float height,
-    glm::vec4 font_color, glm::vec4 bg_color, glm::vec4 border_color
+    glm::vec4 font_color, glm::vec4 bg_color, glm::vec4 border_color,
+    void* font
 );
 
 // game instances forward initialization ========
