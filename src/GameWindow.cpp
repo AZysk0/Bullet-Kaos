@@ -2,7 +2,7 @@
 
 
 // ============= SOME HELPER FUNCTIONS =================
-// shapes rendering
+// === shapes rendering
 void gl_draw_bordered_rectangle(float x_pos, float y_pos,
                                 float width, float height,
                                 glm::vec4 fill_color, glm::vec4 border_color)
@@ -22,7 +22,7 @@ void gl_draw_bordered_rectangle(float x_pos, float y_pos,
     glEnd();
 }
 
-// handling OpenGL metrics
+// === handling OpenGL metrics
 glm::vec2 pixel_to_opengl_coordinates(int px, int py)
 {
     GLFWwindow* window = glfwGetCurrentContext();
@@ -47,7 +47,7 @@ glm::vec2 opengl_to_pixel_coordinates(float gl_x, float gl_y)
     return glm::vec2(px, py);
 }
 
-// text rendering functions
+// === text rendering functions
 int get_text_bitmap_width(const char* text, void* font)
 {
     int length = 0;
@@ -131,6 +131,88 @@ void gl_draw_menu_label_centered(
     gl_draw_text_window_pos(text, font, text_x, text_y, font_color);
 }
 
+// === game structure choice events processing
+
+template <typename T>
+bool is_value_in_vector(const std::vector<T>& vec, const T& target) {
+    auto it = std::find(vec.begin(), vec.end(), target);
+    return it != vec.end();
+}
+
+void process_choice_events(GameStructure* game_structure)
+{
+    std::string menu_type = game_structure->get_current_menu()->get_menu_name();
+
+    // check if menu is a choice menu
+    std::vector<std::string> choice_menu_types  = {"MainMenu", "PauseMenu", "GameoverMenu"};
+
+    if (!is_value_in_vector(choice_menu_types, menu_type)) return;
+
+    // casting to appropriate menu type
+    void* choice_menu_object = game_structure->get_current_menu()->get_menu_object_ptr();
+    MainMenu* main_menu_object = nullptr;
+    PauseMenu* pause_menu_object = nullptr;
+    GameoverMenu* gameover_menu_object = nullptr;
+
+    if (menu_type == "MainMenu")
+        main_menu_object = static_cast<MainMenu*>(choice_menu_object);
+
+    else if (menu_type == "PauseMenu")
+        pause_menu_object = static_cast<PauseMenu*>(choice_menu_object);
+
+    else if (menu_type == "GameoverMenu")
+        GameoverMenu* gameover_menu_object = static_cast<GameoverMenu*>(choice_menu_object);
+
+    else return;
+
+    // get menu choice
+    unsigned short int menu_choice = 0;
+    if (main_menu_object != nullptr)
+        menu_choice = main_menu_object->get_menu_choice();
+
+    else if (pause_menu_object != nullptr)
+        menu_choice = pause_menu_object->get_menu_choice();
+
+    else if (pause_menu_object != nullptr)
+        menu_choice = gameover_menu_object->get_menu_choice();
+
+    else return;
+
+    // menu choices: 0 - endless, 1 - bossfight, 2 - campaign,
+    // 3 - customize, 4 - highscores, 5 - settings
+    switch (menu_choice)
+    {
+        case 0: // endless
+            // Handle endless menu choice here
+            break;
+
+        case 1: // bossfight
+            // Handle bossfight menu choice here
+            break;
+
+        case 2: // campaign
+            // Handle campaign menu choice here
+            break;
+
+        case 3: // customize
+            // Handle customize menu choice here
+            break;
+
+        case 4: // highscores
+            // Handle highscores menu choice here
+            break;
+
+        case 5: // settings
+            // Handle settings menu choice here
+            break;
+
+        default:
+            // Handle invalid menu choice here
+            break;
+    }
+
+}
+
 // ====== Game Window methods definition =================
 GameWindow::GameWindow(int width, int height, const char* title)
 {
@@ -195,6 +277,8 @@ void GameWindow::Run()
 
     while (!glfwWindowShouldClose(m_window))
     {
+        // ===  process user choices
+
         // Render here
         game_structure->render_current_menu();
 
@@ -546,7 +630,7 @@ void MainMenu::menu_key_callback(GLFWwindow* window, int key, int scancode, int 
 // ===== Pause methods definition
 PauseMenu::PauseMenu(unsigned short int max_labels) : AbstractMenu(max_labels)
 {
-
+    this->max_labels = max_labels;
 }
 
 PauseMenu::~PauseMenu()
@@ -578,10 +662,61 @@ void PauseMenu::menu_key_callback(GLFWwindow* window, int key, int scancode, int
 
 // ==== GameOver menu methods definition
 
+GameoverMenu::GameoverMenu(unsigned short int max_labels) : AbstractMenu(max_labels)
+{
+    this->max_labels = max_labels;
+}
 
+GameoverMenu::~GameoverMenu()
+{
 
+}
 
-// ==== Game structure implementation
+// GLFW callback functions
+void GameoverMenu::menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+
+}
+
+// render functions
+void GameoverMenu::render_menu() const
+{
+
+}
+
+///////////////////////////////////////////////////////
+// ==== GAME MODES METHODS IMPLEMENTATION ============
+
+EndlessMode::EndlessMode()
+{
+    // initialize player
+
+    // depending on difficulty initialize enemy pool
+    return;
+}
+
+EndlessMode::~EndlessMode()
+{
+
+}
+
+void EndlessMode::gl_render_score() const
+{
+
+}
+
+void EndlessMode::endless_mode_game_loop()
+{
+    bool game_over = false;
+
+    while (!game_over)
+    {
+        break;
+    }
+}
+
+//////////////////////////////////////////////////////
+// ==== GAME STRUCTURE METHODS ============
 
 MenuNode::MenuNode(const char* menu_name, void* menu_object)
 {
@@ -599,7 +734,27 @@ MenuNode::MenuNode()
 
 MenuNode::~MenuNode()
 {
-    // remove all the data and pointers
+    // free allocated memory
+    if (this->menu_object_ptr == nullptr)
+        return;
+
+    // Cast menu object to the appropriate menu type
+    if (strcmp(this->menu_name, "MainMenu") == 0)
+    {
+        MainMenu* main_menu = static_cast<MainMenu*>(this->menu_object_ptr);
+        delete main_menu;
+    }
+    else if (strcmp(this->menu_name, "PauseMenu") == 0)
+    {
+        PauseMenu* pause_menu = static_cast<PauseMenu*>(this->menu_object_ptr);
+        delete pause_menu;
+    }
+    else if (strcmp(this->menu_name, "GameoverMenu") == 0)
+    {
+        GameoverMenu* gameover_menu = static_cast<GameoverMenu*>(this->menu_object_ptr);
+        delete gameover_menu;
+    }
+    // add more menu types later
 }
 
 // getters/setters
@@ -681,6 +836,19 @@ MenuNode* GameStructure::menu_node_pop()
         current_menu = current_menu->get_prev_node();
         return popped_menu;
     }
+}
+
+void GameStructure::menu_node_remove()
+{
+    if (this->current_menu == nullptr)
+    {
+        // Stack is empty, nothing to remove
+        return;
+    }
+    MenuNode* temp = this->current_menu; // get pointer to the current stack element
+    current_menu = current_menu->get_prev_node();
+    // free memory by pointer saved?
+    delete temp; // delete menu node
 }
 
 // getters/setters

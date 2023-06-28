@@ -6,7 +6,11 @@
 #include <GLFW/glfw3.h>
 //#include <GL/glut.h>
 #include <GL/freeglut.h>
+
 #include <cmath>
+#include <string>
+#include <vector>
+#include <algorithm>
 
 #include "GameInstances.h"
 #include "animations.h"
@@ -146,7 +150,7 @@ public:
 class PauseMenu : public AbstractMenu
 {
 private:
-    const unsigned short int max_labels=2;
+    unsigned short int max_labels;
 public:
     PauseMenu(unsigned short int max_labels);
     ~PauseMenu();
@@ -162,7 +166,7 @@ public:
 class GameoverMenu : public AbstractMenu
 {
 private:
-    const unsigned short int max_labels=2;
+    unsigned short int max_labels;
 public:
     GameoverMenu(unsigned short int max_labels);
     ~GameoverMenu();
@@ -174,16 +178,27 @@ public:
 
 
 //////////////////////////////////////////////
+
+
 // different game loop for each mode
 class EndlessMode
 {
 private:
+    const std::string mode = "Endless";
     unsigned short int difficulty;  // difficulty responds for initial enemy pool state
     unsigned int current_score;     // track current score
     // add enemy pool, player
+    Player* player_ptr;
+    EnemyPool* enemypool_ptr;
 public:
-    void gl_render_score() const;
+    EndlessMode();
+    ~EndlessMode();
+    //
+    void update_game_state();
     void endless_mode_game_loop();
+    //
+    void gl_render_score() const;
+    void gl_render_game() const;
 };
 
 
@@ -247,8 +262,10 @@ public:
     // basic stack functions
     void menu_node_push(MenuNode* menu_node);
     MenuNode* menu_node_pop();
+    void menu_node_remove();
     // getters/setters
     MenuNode* get_current_menu() const;
+    int get_stack_size() const;
     //
     void render_current_menu() const;
 };
