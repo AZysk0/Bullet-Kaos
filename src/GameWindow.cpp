@@ -213,6 +213,31 @@ void process_choice_events(GameStructure* game_structure)
 
 }
 
+void process_game_events(GameStructure* game_structure)
+{
+    return;
+}
+
+// === Files handling functions
+void cfg_load_player()
+{
+    // create config file if does not exist
+    return;
+}
+
+void cfg_load_graphics()
+{
+    // create config file if does not exist
+    return;
+}
+
+void cfg_load_game()
+{
+    // create config file if does not exist
+    return;
+}
+
+////////////////////////////////////////////////////////////
 // ====== Game Window methods definition =================
 GameWindow::GameWindow(int width, int height, const char* title)
 {
@@ -690,6 +715,7 @@ void GameoverMenu::render_menu() const
 EndlessMode::EndlessMode()
 {
     // initialize player
+    Player* player_ptr = new Player();
 
     // depending on difficulty initialize enemy pool
     return;

@@ -97,6 +97,7 @@ private:
     std::vector<Enemy*> enemies;
 
 public:
+    EnemyPool(int difficulty, Player* player_ptr);
     EnemyPool(unsigned short int n_size, Player* player_ptr);
     EnemyPool();
     ~EnemyPool();

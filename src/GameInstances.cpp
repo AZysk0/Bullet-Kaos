@@ -116,6 +116,10 @@ Player::Player(float x_pos, float y_pos, glm::vec3 color)
 // constructor by default
 Player::Player()
 {
+    // later make player settings load from
+    // configuration file for constructor by default
+
+    //
     this->radius=0.03;
     this->x_pos = 0.0;
     this->y_pos = 0.0;
@@ -290,6 +294,19 @@ void Enemy::update_position(float dt)
 }
 
 // ============== EnemyPool (singly linked list) functions / methods ==============
+
+EnemyPool::EnemyPool(int difficulty, Player* player_ptr)
+{
+    // creating enemy pool
+    this->enemies = std::vector<Enemy*>();
+    unsigned short int n_size = (difficulty + 1) * 8;
+
+    while (this->enemies.size() < n_size)
+    {
+        Enemy* enemy_ptr = this->enemy_generate();
+        this->add_enemy(enemy_ptr, player_ptr);
+    }
+}
 
 EnemyPool::EnemyPool(unsigned short int n_size, Player* player_ptr)
 {

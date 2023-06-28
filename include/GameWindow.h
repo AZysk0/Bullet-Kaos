@@ -41,13 +41,14 @@ class Player;
 class Enemy;
 class EnemyPool;
 
-// game window modes classes
+// game window modes classes ====================
 class MainMenu;
 class PauseMenu;
 class EndlessMode;
 class BossfightMode;
 class CampaignMode;
-//
+// ==============================================
+
 
 class GameWindow
 {
@@ -86,7 +87,7 @@ public:
 };
 
 // ============= Designing menus of the game ==============
-// Main Menu structure (Tree-like)
+// Main Menu structure (Stack-like)
 // in each game mode you can also call PauseMenu
 // MainMenu:
 // -- Endless
