@@ -2,46 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="main.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\GameInstances.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="74" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\GameWindow.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1058" topLine="9" />
-		</Cursor>
-		<Folding>
-			<Collapse line="10" />
-			<Collapse line="27" />
-			<Collapse line="43" />
-			<Collapse line="48" />
-			<Collapse line="103" />
-			<Collapse line="171" />
-		</Folding>
-	</File>
-	<File name="include\GameInstances.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2847" topLine="92" />
-		</Cursor>
-	</File>
-	<File name="include\animations.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1811" topLine="65" />
-		</Cursor>
-	</File>
-	<File name="src\animations.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="6778" topLine="166" />
-		</Cursor>
-		<Folding>
-			<Collapse line="127" />
-			<Collapse line="151" />
-		</Folding>
-	</File>
-	<File name="src\GameInstances.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="16879" topLine="282" />
+			<Cursor1 position="4103" topLine="60" />
 		</Cursor>
 		<Folding>
 			<Collapse line="6" />
@@ -66,7 +29,6 @@
 			<Collapse line="154" />
 			<Collapse line="160" />
 			<Collapse line="176" />
-			<Collapse line="181" />
 			<Collapse line="250" />
 			<Collapse line="256" />
 			<Collapse line="264" />
@@ -80,11 +42,66 @@
 			<Collapse line="385" />
 			<Collapse line="394" />
 			<Collapse line="400" />
+			<Collapse line="421" />
+			<Collapse line="505" />
+			<Collapse line="513" />
+			<Collapse line="559" />
+			<Collapse line="593" />
+			<Collapse line="598" />
 		</Folding>
 	</File>
-	<File name="include\GameWindow.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+	<File name="include\GameInstances.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1862" topLine="21" />
+			<Cursor1 position="2292" topLine="75" />
+		</Cursor>
+	</File>
+	<File name="src\animations.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6778" topLine="157" />
+		</Cursor>
+		<Folding>
+			<Collapse line="127" />
+			<Collapse line="151" />
+		</Folding>
+	</File>
+	<File name="src\GameWindow.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="18136" topLine="362" />
+		</Cursor>
+		<Folding>
+			<Collapse line="8" />
+			<Collapse line="26" />
+			<Collapse line="38" />
+			<Collapse line="51" />
+			<Collapse line="61" />
+			<Collapse line="86" />
+			<Collapse line="223" />
+			<Collapse line="231" />
+			<Collapse line="275" />
+			<Collapse line="282" />
+			<Collapse line="287" />
+			<Collapse line="382" />
+			<Collapse line="392" />
+		</Folding>
+	</File>
+	<File name="include\GameWindow.h" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6818" topLine="207" />
+		</Cursor>
+	</File>
+	<File name="include\bosses.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="453" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="225" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="include\animations.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1543" topLine="41" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

@@ -118,6 +118,8 @@ public:
     virtual void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void static_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods); // static wrapper
     void menu_register_key_callback(GLFWwindow* window);
+    //
+    virtual void render_menu() const;
 };
 
 
@@ -133,7 +135,7 @@ public:
     void render_menu_background() const;
     void render_game_logo() const;
     void render_menu_labels() const;
-    void render_main_menu() const;
+    void render_menu() const override;
     // glfw key callback functions
     void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
     //static void static_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods); // static wrapper
@@ -151,7 +153,7 @@ public:
     //
     void pause_call();  // while loop
     void render_pause_labels() const;
-    void render_pause_menu() const;
+    void render_menu() const override;
     // separate key_callback glfw functions
     void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
 };
@@ -166,6 +168,8 @@ public:
     ~GameoverMenu();
     // GLFW callback functions
     void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
+    // render functions
+    void render_menu() const override;
 };
 
 
@@ -205,6 +209,48 @@ public:
     void load_level_from_file();
     // choose level section
     void render_level_choose_section();
+};
+
+// ====== Stack-like structure of the Game ===========
+
+class MenuNode
+{
+private:
+    const char* menu_name;
+    void* menu_object_ptr; // represents value of current node
+    MenuNode* prev_node;
+
+public:
+    MenuNode(const char* menu_name, void* menu_object);
+    MenuNode();
+    ~MenuNode();
+    // getters/setters
+    const char* get_menu_name() const;
+    void* get_menu_object_ptr() const;
+    MenuNode* get_prev_node() const;
+
+    void set_menu_name(const char* menu_name);
+    void set_menu_object_ptr(void* menu_object_ptr);
+    void set_prev_node(MenuNode* prev_node);
+};
+
+
+class GameStructure
+{
+private:
+    MenuNode* current_menu;
+    //GLFWwindow* current_window;
+
+public:
+    GameStructure();
+    ~GameStructure();
+    // basic stack functions
+    void menu_node_push(MenuNode* menu_node);
+    MenuNode* menu_node_pop();
+    // getters/setters
+    MenuNode* get_current_menu() const;
+    //
+    void render_current_menu() const;
 };
 
 // ========================

@@ -191,20 +191,12 @@ bool GameWindow::Initialize()
 void GameWindow::Run()
 {
     //
-    unsigned short int main_menu_max_labels = 6;
-    // load settings/configuration from the file
-
-    // create MainMenu window
-    //MainMenu* main_menu = new MainMenu(); // heap allocation
-    MainMenu main_menu = MainMenu(main_menu_max_labels);    // stack allocation
-    main_menu.menu_register_key_callback(this->m_window);
-    //+++ somehow create current window object and swap between them
-    this->is_current_main_menu = true;
+    GameStructure* game_structure = new GameStructure();
 
     while (!glfwWindowShouldClose(m_window))
     {
         // Render here
-        main_menu.render_main_menu();
+        game_structure->render_current_menu();
 
         // render different menus depending on flags
 
@@ -286,8 +278,7 @@ void GameWindow::FramebufferSizeCallback(GLFWwindow* window, int width, int heig
 
 void GameWindow::CursorPosCallback(GLFWwindow* window, double xpos, double ypos)
 {
-    GameWindow* gameWindow = static_cast<GameWindow*>(glfwGetWindowUserPointer(window));
-
+    // GameWindow* gameWindow = static_cast<GameWindow*>(glfwGetWindowUserPointer(window));
     // Track mouse motion here
     // xpos and ypos represent the new mouse position
 }
@@ -296,7 +287,6 @@ void GameWindow::MouseButtonCallback(GLFWwindow* window, int button, int action,
 {
     return;
 }
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 // ===============  methods implementation ======================
@@ -362,6 +352,11 @@ void AbstractMenu::menu_register_key_callback(GLFWwindow* window)
     glfwSetWindowUserPointer(window, this);
     glfwSetKeyCallback(window, static_key_callback);
     std::cout << "menu initialized. max labels:" << this->max_labels << '\n';
+}
+
+void AbstractMenu::render_menu() const
+{
+    return;
 }
 
 // ============= Main menu ==============
@@ -506,7 +501,7 @@ void MainMenu::render_menu_labels() const
     );
 }
 
-void MainMenu::render_main_menu() const
+void MainMenu::render_menu() const
 {
     // render all components defined earlier
     this->render_menu_background(); // bg first because it must be the "furthest" layer of the rendering
@@ -549,34 +544,34 @@ void MainMenu::menu_key_callback(GLFWwindow* window, int key, int scancode, int 
 }
 
 // ===== Pause methods definition
-PauseMenu(unsigned short int max_labels)
+PauseMenu::PauseMenu(unsigned short int max_labels) : AbstractMenu(max_labels)
 {
 
 }
 
-~PauseMenu()
+PauseMenu::~PauseMenu()
 {
 
 }
 
 //
-void pause_call()
+void PauseMenu::pause_call()
 {
 
 }
 
-void render_pause_labels() const
+void PauseMenu::render_pause_labels() const
 {
 
 }
 
-void render_pause_menu() const
+void PauseMenu::render_menu() const
 {
 
 }
 
-// separate key_callback glfw functions
-void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+// separate key callback glfw functions
+void PauseMenu::menu_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     return;
 }
@@ -584,5 +579,143 @@ void menu_key_callback(GLFWwindow* window, int key, int scancode, int action, in
 // ==== GameOver menu methods definition
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+// ==== Game structure implementation
+
+MenuNode::MenuNode(const char* menu_name, void* menu_object)
+{
+    this->menu_name = menu_name;
+    this->menu_object_ptr = menu_object;
+    this->prev_node = nullptr;
+}
+
+MenuNode::MenuNode()
+{
+    this->menu_name = "";
+    this->menu_object_ptr = nullptr;
+    this->prev_node = nullptr;
+}
+
+MenuNode::~MenuNode()
+{
+    // remove all the data and pointers
+}
+
+// getters/setters
+const char* MenuNode::get_menu_name() const
+{
+    return this->menu_name;
+}
+
+void* MenuNode::get_menu_object_ptr() const
+{
+    return this->menu_object_ptr;
+}
+
+MenuNode* MenuNode::get_prev_node() const
+{
+    return this->prev_node;
+}
+
+void MenuNode::set_menu_name(const char* menu_name)
+{
+    this->menu_name = menu_name;
+}
+
+void MenuNode::set_menu_object_ptr(void* menu_object_ptr)
+{
+    this->menu_object_ptr = menu_object_ptr;
+}
+
+void MenuNode::set_prev_node(MenuNode* prev_node)
+{
+    this->prev_node = prev_node;
+}
+
+// ===
+GameStructure::GameStructure()
+{
+    current_menu = nullptr; // Initialize current_menu to nullptr or a valid initial value
+    GLFWwindow* current_window = glfwGetCurrentContext();
+    // main menu of 6 labels is current by default
+    unsigned short int main_menu_labels = 6;
+    MainMenu* main_menu_object = new MainMenu(main_menu_labels);
+    // make main menu current window in game structure
+    MenuNode* main_menu_node = new MenuNode("MainMenu", main_menu_object);
+    menu_node_push(main_menu_node); // Push the main menu node onto the stack
+    main_menu_object->menu_register_key_callback(current_window);
+}
+
+GameStructure::~GameStructure()
+{
+    return;
+}
+
+// basic stack functions
+void GameStructure::menu_node_push(MenuNode* menu_node)
+{
+    if (current_menu == nullptr)
+    {
+        // If the stack is empty, set the current_menu to the new menu_node
+        this->current_menu = menu_node;
+        menu_node->set_prev_node(nullptr);
+        return;
+    }
+    // Make the new menu_node the current_menu and update the previous node
+    menu_node->set_prev_node(this->current_menu);
+    this->current_menu = menu_node;
+}
+
+MenuNode* GameStructure::menu_node_pop()
+{
+    if (current_menu == nullptr)
+    {
+        // Stack is empty, return nullptr
+        return nullptr;
+    }
+    else
+    {
+        // Get the current_menu and update current_menu to the previous node
+        MenuNode* popped_menu = current_menu;
+        current_menu = current_menu->get_prev_node();
+        return popped_menu;
+    }
+}
+
+// getters/setters
+MenuNode* GameStructure::get_current_menu() const
+{
+    return this->current_menu;
+}
+
+void GameStructure::render_current_menu() const
+{
+    if (this->current_menu == nullptr)
+        return;
+
+    // type casting depending on menu object class
+    const char* menu_type = this->current_menu->get_menu_name();
+    void* menu_object_ptr = this->current_menu->get_menu_object_ptr();
+    MainMenu* menu_object_casted_main = nullptr;
+    PauseMenu* menu_object_casted_pause = nullptr;
+    GameoverMenu* menu_object_casted_gameover = nullptr;
+
+    if (strcmp(menu_type, "MainMenu") == 0)
+        menu_object_casted_main = static_cast<MainMenu*>(menu_object_ptr);
+    else if (strcmp(menu_type, "PauseMenu") == 0)
+        menu_object_casted_pause = static_cast<PauseMenu*>(menu_object_ptr);
+    else if (strcmp(menu_type, "GameoverMenu") == 0)
+        menu_object_casted_gameover = static_cast<GameoverMenu*>(menu_object_ptr);
+    else
+        return;
+
+    if (menu_object_casted_main != nullptr)
+        menu_object_casted_main->render_menu();
+    else if (menu_object_casted_pause != nullptr)
+        menu_object_casted_pause->render_menu();
+    else if (menu_object_casted_gameover != nullptr)
+        menu_object_casted_gameover->render_menu();
+
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////
